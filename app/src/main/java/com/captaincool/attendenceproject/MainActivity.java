@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
         {
             startActivity(new Intent(this,Login.class));
         }
+        Log.d("Rapp","User is:"+user.getUsername());
         mBottomNavigationView = findViewById(R.id.bnav);
         updateFrag = new updateFrag();
         addFrag = new addFrag();
