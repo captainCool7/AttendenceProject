@@ -28,11 +28,8 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "Rapp";
     public ArrayList<String> nameList,divList,nlist,plist,alist;
-    Button show;
-//    private BottomNavigationView mBottomNavigationView;
-//    private updateFrag updateFrag;
-//    private addFrag addFrag;
-//    private showFrag showFrag;
+    Button show,sbyd;
+
     private ImageButton b1,b2;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
         alist = new ArrayList<>();
         b1= findViewById(R.id.b1);
         b2= findViewById(R.id.b2);
+        sbyd = findViewById(R.id.sbyd);
         show = findViewById(R.id.show);
         b1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,42 +66,12 @@ public class MainActivity extends AppCompatActivity {
                 showData();
             }
         });
-//        Log.d("Rapp","User is:"+user.getUsername());
-//        mBottomNavigationView = findViewById(R.id.bnav);
-//        updateFrag = new updateFrag();
-//        addFrag = new addFrag();
-//        showFrag = new showFrag();
-//        Log.e(TAG, "working");
-//        setFragment(updateFrag);
-//        //getSupportFragmentManager().beginTransaction().replace(R.id.frag_con, new updateFrag()).commit();
-//        Log.e(TAG, "working1");
-//        mBottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-//            @Override
-//            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-//                switch (menuItem.getItemId()) {
-//                    case R.id.add:
-//                        setFragment(addFrag);
-//                        return true;
-//                    case R.id.update:
-//                        setFragment(updateFrag);
-//                        return true;
-//                    case R.id.show:
-//                        setFragment(showFrag);
-//                        return true;
-//                        default:
-//                            return false;
-//                }
-//            }
-//        });
-//        Log.e(TAG, "working3");
-//
-//    }
-//    private  void setFragment(Fragment fragment)
-//    {
-//        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-//        fragmentTransaction.replace(R.id.frag_con,fragment);
-//        fragmentTransaction.commit();
-//    }
+        sbyd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this,dateChoose.class));
+            }
+        });
     }
 
     private void showData() {

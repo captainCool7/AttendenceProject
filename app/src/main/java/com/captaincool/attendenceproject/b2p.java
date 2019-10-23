@@ -14,13 +14,20 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.SaveCallback;
+
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class b2p extends AppCompatActivity {
     private static final String TAG = "Rapp";
     ArrayList<String> names,divs,selected;
     ListView listView;
     Button submit;
+    Calendar c;
+    String s;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,6 +36,13 @@ public class b2p extends AppCompatActivity {
         names = intent.getStringArrayListExtra("names");
         divs = intent.getStringArrayListExtra("divs");
         listView = findViewById(R.id.listView);
+        c= Calendar.getInstance();
+        int year = c.get(Calendar.YEAR);
+        int month = c.get(Calendar.MONTH);
+        int day =c.get(Calendar.DAY_OF_MONTH);
+        month++;
+        s = year+""+month+""+day;
+        Log.d(TAG,"Date is: "+year+"/"+month+"/"+day);
         selected = new ArrayList<>();
         submit = findViewById(R.id.submit);
         Log.d(TAG,"Divs is: "+divs);
@@ -44,8 +58,28 @@ public class b2p extends AppCompatActivity {
     private void takeAwayList() {
         Intent i = new Intent(b2p.this,storeB2p.class);
         Log.d("Rapp","name is: "+selected);
+        for(String value : selected)
+        {
+            Log.d("Rapp","name is: "+value);
+            updateDpresent(value,s);
+        }
         i.putExtra("snames",selected);
         startActivity(i);
+    }
+    private void updateDpresent(final String value,final String s)
+    {
+        ParseObject data = new ParseObject("Dpresent");
+        data.put("studname",value);
+        data.put("Ivalue",s);
+        data.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if(e == null)
+                {
+                    Log.d("Rapp","Successful: ");
+                }
+            }
+        });
     }
 
     public void setArrayAdapter()
