@@ -46,7 +46,7 @@ public class Login extends AppCompatActivity {
     void signUp()
     {
         user.add("name",name.getText().toString());
-        user.setUsername(uname.getText().toString());
+        user.setUsername(name.getText().toString());
         user.setPassword(pass.getText().toString());
         user.signUpInBackground(new SignUpCallback() {
             @Override

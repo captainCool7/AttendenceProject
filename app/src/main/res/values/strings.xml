@@ -2,8 +2,8 @@
     <string name="app_name">AttendenceProject</string>
     <string name="back4app_server_url">https://parseapi.back4app.com/</string>
     <!-- Change the following strings as required -->
-    <string name="back4app_app_id">lwGcjSLyj0OaEJvuFhVY0FsK2Lu1rVpQ5BgjjRMr</string>
-    <string name="back4app_client_key">ndVAzDv55QhMLc0nMzFb4fgb0kg1mO7syVBqi1MS</string>
+    <string name="back4app_app_id">25otS6vjJYSEdUKmpVmz57qN4MkAcPuoOqyIAtqD</string>
+    <string name="back4app_client_key">XulSHsw6GuwH7tLomU1NhqOM0wd8w5WaAMQdLuAI</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

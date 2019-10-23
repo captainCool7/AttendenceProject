@@ -2,69 +2,202 @@ package com.captaincool.attendenceproject;
 
 import androidx.annotation.NonNull;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.parse.FindCallback;
 import com.parse.Parse;
+import com.parse.ParseException;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "Rapp";
-    private BottomNavigationView mBottomNavigationView;
-    private updateFrag updateFrag;
-    private addFrag addFrag;
-    private showFrag showFrag;
+    public ArrayList<String> nameList,divList,nlist,plist,alist;
+    Button show;
+//    private BottomNavigationView mBottomNavigationView;
+//    private updateFrag updateFrag;
+//    private addFrag addFrag;
+//    private showFrag showFrag;
+    private ImageButton b1,b2;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ParseUser user = ParseUser.getCurrentUser();
-        if(user == null)
-        {
-            startActivity(new Intent(this,Login.class));
+        if (user == null) {
+            startActivity(new Intent(this, Login.class));
         }
-        Log.d("Rapp","User is:"+user.getUsername());
-        mBottomNavigationView = findViewById(R.id.bnav);
-        updateFrag = new updateFrag();
-        addFrag = new addFrag();
-        showFrag = new showFrag();
-        Log.e(TAG, "working");
-        setFragment(updateFrag);
-        //getSupportFragmentManager().beginTransaction().replace(R.id.frag_con, new updateFrag()).commit();
-        Log.e(TAG, "working1");
-        mBottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+        nameList = new ArrayList<>();
+        divList = new ArrayList<>();
+        nlist = new ArrayList<>();
+        plist = new ArrayList<>();
+        alist = new ArrayList<>();
+        b1= findViewById(R.id.b1);
+        b2= findViewById(R.id.b2);
+        show = findViewById(R.id.show);
+        b1.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                switch (menuItem.getItemId()) {
-                    case R.id.add:
-                        setFragment(addFrag);
-                        return true;
-                    case R.id.update:
-                        setFragment(updateFrag);
-                        return true;
-                    case R.id.show:
-                        setFragment(showFrag);
-                        return true;
-                        default:
-                            return false;
-                }
+            public void onClick(View view) {
+                searchB1();
             }
         });
-        Log.e(TAG, "working3");
+        b2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                searchB2();
+            }
+        });
+        show.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showData();
+            }
+        });
+//        Log.d("Rapp","User is:"+user.getUsername());
+//        mBottomNavigationView = findViewById(R.id.bnav);
+//        updateFrag = new updateFrag();
+//        addFrag = new addFrag();
+//        showFrag = new showFrag();
+//        Log.e(TAG, "working");
+//        setFragment(updateFrag);
+//        //getSupportFragmentManager().beginTransaction().replace(R.id.frag_con, new updateFrag()).commit();
+//        Log.e(TAG, "working1");
+//        mBottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+//            @Override
+//            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+//                switch (menuItem.getItemId()) {
+//                    case R.id.add:
+//                        setFragment(addFrag);
+//                        return true;
+//                    case R.id.update:
+//                        setFragment(updateFrag);
+//                        return true;
+//                    case R.id.show:
+//                        setFragment(showFrag);
+//                        return true;
+//                        default:
+//                            return false;
+//                }
+//            }
+//        });
+//        Log.e(TAG, "working3");
+//
+//    }
+//    private  void setFragment(Fragment fragment)
+//    {
+//        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+//        fragmentTransaction.replace(R.id.frag_con,fragment);
+//        fragmentTransaction.commit();
+//    }
+    }
 
+    private void showData() {
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Present");
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> objects, ParseException e) {
+                if(e == null)
+                {
+                    if(objects.size()>0)
+                    {
+                        for(ParseObject obj : objects)
+                        {
+                            Log.d(TAG,"Name is: "+obj.getString("studname"));
+                            Log.d(TAG,"Name is: "+obj.getNumber("Present"));
+                            Log.d(TAG,"Name is: "+obj.getNumber("Absent"));
+                            nlist.add(obj.getString("studname"));
+                            plist.add(obj.getNumber("Present").toString());
+                            alist.add(obj.getNumber("Absent").toString());
+                        }
+                    }
+                }
+                Intent i = new Intent(MainActivity.this,b1showData.class);
+                i.putExtra("nlist",nlist);
+                i.putExtra("plist",plist);
+                i.putExtra("alist",alist);
+                startActivity(i);
+            }
+        });
     }
-    private  void setFragment(Fragment fragment)
-    {
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.frag_con,fragment);
-        fragmentTransaction.commit();
+
+    private void searchB2() {
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Student");
+        query.whereEqualTo("batchid",2);
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> objects, ParseException e) {
+                if(e == null)
+                {
+                    if(objects.size() > 0)
+                    {
+                        for(ParseObject obj : objects )
+                        {
+                            Log.d(TAG, "Name is: "+obj.getString("studname"));
+                            Log.d(TAG, "Division is: "+obj.getString("division"));
+                            nameList.add(obj.getString("studname"));
+                            divList.add(obj.getString("division"));
+                        }
+                    }
+                }
+                Intent i = new Intent(MainActivity.this,b2List.class);
+                i.putExtra("names",nameList);
+                i.putExtra("divs",divList);
+                startActivity(i);
+            }
+        });
     }
+
+    private void searchB1() {
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Student");
+        query.whereEqualTo("batchid",1);
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> objects, ParseException e) {
+                if(e == null)
+                {
+                    if(objects.size() > 0)
+                    {
+                        for(ParseObject obj : objects )
+                        {
+                            Log.d(TAG, "Name is: "+obj.getString("studname"));
+                            Log.d(TAG, "Division is: "+obj.getString("division"));
+                            nameList.add(obj.getString("studname"));
+                            divList.add(obj.getString("division"));
+                        }
+                    }
+                }
+                Intent i = new Intent(MainActivity.this,b1List.class);
+                i.putExtra("names",nameList);
+                i.putExtra("divs",divList);
+                startActivity(i);
+            }
+        });
+        }
+        public void Logout(View v)
+        {
+            ProgressDialog progress = new ProgressDialog(this);
+            progress.setMessage("Loading.....");
+            progress.show();
+            ParseUser.logOut();
+            Intent intent = new Intent(MainActivity.this,loginAct.class);
+            startActivity(intent);
+            finish();
+            progress.dismiss();
+        }
 }
 
